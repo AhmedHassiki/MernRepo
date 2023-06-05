@@ -13,8 +13,8 @@ import FormLogin from './Components/FormLogin';
 import FormRegister from './Components/FormRegister';
 import { getAuthUser, logout } from './JS Redux/actions/authActions';
 import ProductDescription from './Components/ProductDescription';
+// import BasketCard from './Components/Basket/BasketCard';
 import BasketList from './Components/Basket/BasketList';
-import BasketCard from './Components/Basket/BasketCard';
 
 function App() {
 const navigate = useNavigate();
@@ -59,7 +59,7 @@ useEffect(()=>{
       </>
         )
       }
-      <Link to="/panier"><BasketCard/></Link>
+      <Link to="/panier"><Button className="border-0 bg-transparent" variant="none" style={{color: "white"}}>Panier</Button></Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -75,7 +75,7 @@ useEffect(()=>{
         <Route path="/quisommesnous" element={<QuiSommesNous />} />
         <Route path="/mention" element={<Mention />} />        
         <Route path="/desc/:id" element={<ProductDescription />}/>
-        <Route path="/panier" element={<BasketCard />} />
+        <Route path="/panier" element={<BasketList />} />
       </Routes>
       <Footer />
 

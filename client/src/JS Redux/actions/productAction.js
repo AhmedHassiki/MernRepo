@@ -51,26 +51,3 @@ export const editProduct = (id, product) => async(dispatch) => {
         console.log(error)
     }
 }
-
-// export const addToCart = (product) => (dispatch, getState) => {
-//     dispatch({
-//       type: ADD_TO_CART,
-//       payload: product,
-//     });
-//     localStorage.setItem(
-//       "cartItems",
-//       JSON.stringify(getState().productReducer.cartItems)
-//     );
-//   };
-// export const removeFromCart = (product) => (dispatch) =>{
-//     dispatch({
-//         type: REMOVE_FROM_CART,
-//         payload: product})
-//     };
-
-// export const updateQuantity = (id, quantity) => (dispatch) => {
-//     dispatch({
-//         type: UPDATE_QUANTITY,
-//         payload: id,quantity
-//         })
-// };

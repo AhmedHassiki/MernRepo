@@ -10,9 +10,9 @@ const TheProductCard = ({product}) => {
   
 
   const dispatch = useDispatch();
-  const delProduct = (id) => dispatch(deleteProduct(id));
-  const getProduct = (id) => dispatch(getOneProduct(id));
-  const editTrue = () => dispatch(toggleTrue());
+  const delProduct = (id) => dispatch(deleteProduct(id)); // delete one product
+  const getProduct = (id) => dispatch(getOneProduct(id));// get one product to edit it
+  const editTrue = () => dispatch(toggleTrue()); // toggle button between add product and edit product
 
   // const isAuth = useSelector(state=>state.authReducer.isAuth);
   const userAuth = useSelector(state=>state.authReducer.user)

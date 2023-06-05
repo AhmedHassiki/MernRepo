@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './ProductDescription.css'
 import { Button } from 'react-bootstrap'
@@ -15,6 +15,9 @@ const ProductDescription = () => {
     dispatch(postCart(product, quantity))
   }
 
+  // useEffect({
+  //   dispatch(getProduct())
+  // },[])
   return (
 
 <div className="cart">

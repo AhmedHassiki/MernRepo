@@ -1,7 +1,9 @@
 import { ADD_TO_CART, FETCH_CART_FAILURE, FETCH_CART_SUCCESS } from '../constant/CartConstant';
 
 const initialState = {
-  basket : []
+  basket : [],
+  loading : true,
+  error : false
 };
 
 export const cartReducer = (state = initialState, action) => {
