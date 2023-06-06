@@ -1,23 +1,26 @@
-import { ADD_TO_CART, FETCH_CART_SUCCESS, FETCH_CART_FAILURE } from '../constant/CartConstant';
+import { ADD_TO_CART, FETCH_CART_SUCCESS, FETCH_CART_FAILURE , LOAD_CART } from '../constant/CartConstant';
 import axios from 'axios'
 
 
 
-export const postCart = (product, count) => async (dispatch) => {
+export const postCart = (id, count) => async (dispatch) => {
+
   try {
     const config = {
       headers:{
           "x-auth-token": localStorage.getItem('token')
       }
     };
-    const { data } = await axios.post('/api/cart', { productId: product._id, count }, config);
-    dispatch({ type: ADD_TO_CART, payload: data });
+    const { data } = await axios.post('/api/cart', { productId: id, count }, config);
+    dispatch({ type: ADD_TO_CART, payload: data.response } );
+    dispatch(fetchCart())
   } catch (error) {
     console.log(error);
   }
 };
 
 export const fetchCart = () => async(dispatch) => {
+  dispatch(loading())
   try {
     const config = {
       headers: {
@@ -35,3 +38,19 @@ export const fetchCart = () => async(dispatch) => {
     dispatch({ type: FETCH_CART_FAILURE });
   }
 };
+
+export const loading = dispatch=>{
+  return{
+    type:LOAD_CART
+  }
+}
+
+export const deleteCart = (id) => async(dispatch)=>{
+  try {
+      console.log("id:" , id)
+      await axios.delete(`/api/cart/${id}`);
+      dispatch(fetchCart())
+  } catch (error) {
+      console.log(error)
+  }
+}

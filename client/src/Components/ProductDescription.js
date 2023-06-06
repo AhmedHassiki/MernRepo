@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import './ProductDescription.css'
 import { Button } from 'react-bootstrap'
 import { postCart } from '../JS Redux/actions/CartAction'
+import { Link } from 'react-router-dom'
 
 
 const ProductDescription = () => {
@@ -12,7 +13,7 @@ const ProductDescription = () => {
   const product = useSelector(state=>state.productReducer.product);
   const [quantity, setQuantity] = useState(1)
   const handleAddtocart = () => {
-    dispatch(postCart(product, quantity))
+    dispatch(postCart(product._id, quantity))
   }
 
   // useEffect({
@@ -35,7 +36,7 @@ const ProductDescription = () => {
         <Button onClick={() => setQuantity(quantity - 1)} style={{ marginLeft: '10px' }} disabled={quantity === 1}> - </Button>
         </div>
       </div>
-      <button className="add-to-cart" onClick={handleAddtocart} >Add to Cart</button>
+     <Link to="/"> <button className="add-to-cart" onClick={handleAddtocart} >Add to Cart</button></Link>
     </div>
   </div>
 </div>

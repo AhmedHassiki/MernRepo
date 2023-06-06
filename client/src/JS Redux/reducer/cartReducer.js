@@ -1,15 +1,17 @@
-import { ADD_TO_CART, FETCH_CART_FAILURE, FETCH_CART_SUCCESS } from '../constant/CartConstant';
+import { ADD_TO_CART, FETCH_CART_FAILURE, FETCH_CART_SUCCESS, LOAD_CART } from '../constant/CartConstant';
 
 const initialState = {
   basket : [],
-  loading : true,
+  loading : false,
   error : false
 };
 
 export const cartReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOAD_CART:
+    return {...state , loading:true}
     case ADD_TO_CART:
-      return { ...state, basket : [...state.basket, action.payload] }
+      return { ...state, basket : [...state.basket, action.payload]  }
     case FETCH_CART_SUCCESS:
         return {...state, basket : action.payload, loading: false, error: false};
     case FETCH_CART_FAILURE:

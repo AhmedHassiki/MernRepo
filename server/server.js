@@ -2,6 +2,7 @@ const express = require("express");
 const Products = require('./routes/product')
 const User = require('./routes/userRoute')
 const Cart = require('./routes/cartRoute')
+const Order = require("./routes/orderRoute");
 
 const app = express();
 require('dotenv').config();
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use('/api/product', Products);
 app.use('/api/auth', User );
 app.use('/api/cart', Cart );
+app.use('/api/order', Order );
 
 const PORT = process.env.PORT || 4040;
 

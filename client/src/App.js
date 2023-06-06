@@ -15,6 +15,7 @@ import { getAuthUser, logout } from './JS Redux/actions/authActions';
 import ProductDescription from './Components/ProductDescription';
 // import BasketCard from './Components/Basket/BasketCard';
 import BasketList from './Components/Basket/BasketList';
+import { fetchCart } from './JS Redux/actions/CartAction';
 
 function App() {
 const navigate = useNavigate();
@@ -34,6 +35,7 @@ const getUser = async() =>{
 useEffect(()=>{
   if(localStorage.getItem("token")){
     getUser()
+    fetchCart()
   } 
 },[])
 

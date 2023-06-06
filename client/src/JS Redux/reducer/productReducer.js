@@ -24,12 +24,6 @@ export const productReducer = (state = initialState, action) => {
             return {...state, product : action.payload}
         case EDIT_PRODUCT:
             return {...state, editProduct : action.payload}
-        // case ADD_TO_CART:
-        //     return {...state, cartItems: [...state.cartItems, action.payload]};
-        // case REMOVE_FROM_CART:
-        //     return {...state,cartItems: state.cartItems.filter((item) => item._id !== action.payload._id)};
-        // case UPDATE_QUANTITY:
-        //     return {...state,cartItems: state.cartItems.map((item) =>item._id === action.payload.id? { ...item, quantity: action.payload.quantity } : item)};
         default :
             return state
     }

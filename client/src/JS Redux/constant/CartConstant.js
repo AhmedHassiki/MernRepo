@@ -4,3 +4,5 @@ export const CART_RESET = "CART_RESET";
 export const CART_UPDATE = "CART_UPDATE";
 export const FETCH_CART_SUCCESS = "FETCH_CART_SUCCESS";
 export const FETCH_CART_FAILURE = "FETCH_CART_FAILURE";
+
+export const LOAD_CART = "LOAD_CART"

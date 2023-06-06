@@ -22,8 +22,8 @@ exports.addToCart = async (req, res) => {
         console.log("newCartItem:", newCartItem)
         await newCartItem.save();
       }  
-      const cart = await Cart.find({ userId }).populate('productId');  
-      res.status(200).json(cart);
+      // const cart = await Cart.find({ userId }).populate('productId');  
+      // res.status(200).json(cart);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Erreur serveur' });
@@ -44,3 +44,18 @@ exports.addToCart = async (req, res) => {
       res.status(500).json({ message: 'Erreur serveur' });
     }
   };
+
+  exports.deleteCart = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const result = await Cart.findByIdAndDelete({_id:id})
+            if (!result){
+                return res.status(400).send({msg:"There's no product with this ID"})
+            }
+        return res.status(200).send({msg:"Cart deleted successfully"})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({msg:"No cart deleted"})
+        
+    }
+}
