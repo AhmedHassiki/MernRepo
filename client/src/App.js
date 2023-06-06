@@ -13,9 +13,9 @@ import FormLogin from './Components/FormLogin';
 import FormRegister from './Components/FormRegister';
 import { getAuthUser, logout } from './JS Redux/actions/authActions';
 import ProductDescription from './Components/ProductDescription';
-// import BasketCard from './Components/Basket/BasketCard';
 import BasketList from './Components/Basket/BasketList';
 import { fetchCart } from './JS Redux/actions/CartAction';
+import OrderList from './Components/Order/OrderList';
 
 function App() {
 const navigate = useNavigate();
@@ -78,6 +78,7 @@ useEffect(()=>{
         <Route path="/mention" element={<Mention />} />        
         <Route path="/desc/:id" element={<ProductDescription />}/>
         <Route path="/panier" element={<BasketList />} />
+        <Route path="/order" element={<OrderList />} />
       </Routes>
       <Footer />
 

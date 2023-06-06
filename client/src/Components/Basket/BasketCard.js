@@ -25,7 +25,7 @@ const BasketCard = ({cart}) => {
 console.log(cart);
 
   return (
-
+<>
     <Table striped bordered hover>
       <thead>
         <tr>
@@ -53,6 +53,8 @@ console.log(cart);
         </tr>
       </tbody>
     </Table>
+    
+    </>
 // <div  style={{display:"flex" , flexWrap:'wrap', justifyContent:'center'}}>
 //         <Card style={{ width: '18rem', margin:'10px', height:'38rem' }}>
 //       <Card.Img style={{ width: '17rem', height:'24rem', marginTop:'10px' }} variant="top" src={cart.productId.selectedFile}/>

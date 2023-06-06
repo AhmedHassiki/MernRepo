@@ -55,7 +55,7 @@ exports.createOrder = async (req, res) => {
 
     // Vider le panier de l'utilisateur
     
-     await Cart.deleteMany({userId:req.user._id});
+    await Cart.deleteMany({userId:req.user._id});
 
     res.status(201).json({ message: 'Commande créée avec succès', order });
   } catch (error) {
@@ -64,13 +64,6 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-const deleteBasket = async(req,res)=>{
-    try {
-        
-    } catch (error) {
-        
-    }
-}
 
 // // Récupérer toutes les commandes de l'utilisateur connecté
 // exports.getOrders = async (req, res) => {

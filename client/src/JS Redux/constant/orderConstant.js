@@ -1,0 +1,3 @@
+
+export const CREATE_ORDER = "CREATE_ORDER";
+export const SET_SHIPPING_ADDRESS = "SET_SHIPPING_ADDRESS";

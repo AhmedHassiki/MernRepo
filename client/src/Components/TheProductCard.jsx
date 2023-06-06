@@ -19,14 +19,16 @@ const TheProductCard = ({product}) => {
   
   return (
     <div>
-        <Card style={{ width: '18rem', margin:'10px', height:'38rem' }}>
+        <Link to={`/desc/${product._id}`} onClick={()=>getProduct(product._id)} style={{ textDecoration:"none", color:"black" }}>
+
+          <Card style={{ width: '18rem', margin:'10px', height:'38rem' }}>
       <Card.Img style={{ width: '17rem', height:'24rem', marginTop:'10px' }} variant="top" src={product.selectedFile}/>
       <Card.Body>
         <Card.Title>{product.title}</Card.Title>
         {/* <Card.Text>{product.description}</Card.Text> */}
         <Card.Text>Price : {product.price}$</Card.Text>
         {/* <Card.Text>Category : {product.category}</Card.Text> */}
-        <Link to={`/desc/${product._id}`} onClick={()=>getProduct(product._id)}>More Info</Link>
+        {/* <Link to={`/desc/${product._id}`} onClick={()=>getProduct(product._id)}>More Info</Link> */}
         {/* {userAuth.role === "admin" ? <></> : <Button variant="primary" style={{margin:"10px"}}>Buy</Button>} */} 
         {
           userAuth.role === "admin" ? 
@@ -39,6 +41,7 @@ const TheProductCard = ({product}) => {
         }
       </Card.Body>
     </Card>
+    </Link>
     </div>
   )
 }

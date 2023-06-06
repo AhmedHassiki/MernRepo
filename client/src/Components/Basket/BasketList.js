@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import BasketCard from './BasketCard'
-import { Spinner } from 'react-bootstrap'
+import { Button, Spinner } from 'react-bootstrap'
 import { fetchCart } from '../../JS Redux/actions/CartAction'
+import { Link } from 'react-router-dom'
 
 const BasketList = () => {
 
@@ -35,7 +36,7 @@ const BasketList = () => {
       { loading ? (<Spinner animation="border" variant="danger" />) : basket.length === 0 ? (
       <h2>There's no cart in the basket</h2> 
       ) : ( basket.map((el)=> <BasketCard key={el._id} cart={el} /> ) ) }
-
+      <Link to='/order'><Button >Confirmer ma commande</Button></Link>
     </div>
   )
 }
