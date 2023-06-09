@@ -56,6 +56,9 @@ const orderSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now
+    },
+    checkpayment :{
+        type: String
     }
 });
 

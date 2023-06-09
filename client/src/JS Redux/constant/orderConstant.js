@@ -2,3 +2,4 @@
 export const CREATE_ORDER = "CREATE_ORDER";
 export const SET_SHIPPING_ADDRESS = "SET_SHIPPING_ADDRESS";
 export const GET_ORDER = "GET_ORDER";
+export const LOAD_ORDER = "LOAD_ORDER";

@@ -11,29 +11,35 @@ const BasketList = () => {
   const basket = useSelector((state) => state.cartReducer.basket);
   // console.log("lpanier :", basket)
   const loading = useSelector((state) => state.cartReducer.loading);
+  //*********** state for the checkbox payment and shipping */
+  // const [checkpayment, setCheckpayment] = useState(false)
+  // const handleChange = (e) => {
+  //   setCheckpayment(e.target.checked)
+  // }
+  const [checkpayment, setCheckpayment] = useState(false);
+  console.log("checkpayment : ",checkpayment)
+  // const handleChange = (e) => {
+  //   setCheckpayment(e.target.name : e.target.checked);
+  // };
 
-  
-    const [newOrder, setNewOrder] = useState({
-      shippingAddress: "",
-      paymentMethod: "koko",
-      shippingCost: 7,
-      noShippingCost: 0,
-      email: "",
-      phone: "",
-    });
-
+  //*********** state for data that'll be sent to database */
+  const [newOrder, setNewOrder] = useState({
+    shippingAddress: "",
+    paymentMethod: "koko",
+    email: "",
+    phone: "",
+    checkpayment:false
+  });
+  console.log("order : " , newOrder)
 
   const handleOrder = (e) => {
     setNewOrder({ ...newOrder, [e.target.name]: e.target.value });
-      };
-      console.log("newOrder", newOrder)
+  };
+  // console.log("newOrder", newOrder);
 
   const sendOrder = () => {
-    dispatch(createOrder(newOrder))
-  }
-  // const handleOrder = ()=>{
-  //   dispatch(createOrder({shippingAddress:"slh", paymentMethod:"test" , shippingCost:10}))
-  // }
+    dispatch(createOrder(newOrder));
+  };
 
   const total = () => {
     let t = 0;
@@ -42,10 +48,13 @@ const BasketList = () => {
       t = el.productId.price * el.count;
       total = total + t;
     });
+    if(newOrder.checkpayment === "true"){
+      return total + 7;
+    }
     return total;
   };
 
-  console.log(total());
+  // console.log(total());
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -88,7 +97,7 @@ const BasketList = () => {
               type=""
               placeholder="Enter your shipping address"
               onChange={handleOrder}
-              name = "shippingAddress"
+              name="shippingAddress"
             />
             <Form.Label>E-mail</Form.Label>
             <Form.Control
@@ -96,7 +105,7 @@ const BasketList = () => {
               type="text"
               placeholder="Enter your e-mail"
               onChange={handleOrder}
-              name = "email"
+              name="email"
             />
             <Form.Label>Phone number</Form.Label>
             <Form.Control
@@ -104,17 +113,18 @@ const BasketList = () => {
               type="text"
               placeholder="Enter your phone number"
               onChange={handleOrder}
-              name = "phone"
+              name="phone"
             />
           </Form.Group>
-          {["checkbox"].map((type) => (
+          {/* {["checkbox"].map((type) => (
             <div key={`reverse-${type}`} className="mb-3">
               <Form.Check
                 label="Livraison par E-mail"
                 // name="group1"
                 type={type}
                 id={`reverse-${type}-1`}
-                name = "noShippingCost"
+                // name = "noShippingCost"
+                // onChange={setCheckpayment(checkpayment===true))}
               />
               <Form.Check
                 //  onChange={()=>setIsShippingCost(true)}
@@ -126,9 +136,29 @@ const BasketList = () => {
                 name = "ShippingCost"
               />
             </div>
-          ))}
+          ))} */}
+          <label>
+            <input
+              type="checkbox"
+              checked={newOrder.checkpayment === "false"}
+              onChange={handleOrder}
+              name="checkpayment"
+              value={false}
+            />
+            email
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={newOrder.checkpayment ==="true"}
+              name="checkpayment"
+              onChange={handleOrder}
+              value={true}
+            />
+            Livraison à domicile + 7DT
+          </label>
 
-          <Form.Check // prettier-ignore
+          {/* <Form.Check // prettier-ignore
             type="switch"
             id="custom-switch"
             label=" Paiement en ligne (E-dinar - Sobflouss - D17)"
@@ -138,11 +168,11 @@ const BasketList = () => {
             type="switch"
             label="Paiement à la livraison"
             id="disabled-custom-switch"
-          />
+          /> */}
         </Form>
       </div>
       <Link to="/order">
-        <Button onClick={() =>sendOrder()}>Confirmer ma commande</Button>
+        <Button onClick={() => sendOrder()}>Confirmer ma commande</Button>
       </Link>
     </div>
   );

@@ -12,8 +12,8 @@ exports.createOrder = async (req, res) => {
     }
 
     // Récupérer les données de la commande à partir du corps de la requête
-    const { shippingAddress, paymentMethod, email, phone } = req.body;
-
+    const { shippingAddress, paymentMethod, email, phone, checkpayment } = req.body;
+    
 
     // Récupérer les produits dans le panier de l'utilisateur
     const userId = req.user._id;
@@ -24,15 +24,22 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: 'Le panier est vide' });
     }
 
+    
     // Calculer le coût total de la commande
     let totalCost = 0;
-    let shippingCost = req.body.shippingCost;
+    let shippingCost = 0;
+
+    if(checkpayment === "true"){
+      shippingCost = 7 ;
+    } else {
+      shippingCost = 0;
+    }
 
     for (const item of cartItems) {
         // console.log(item.productId.price)
       totalCost += item.count * parseInt(item.productId.price);
     }
-    shippingCost += totalCost;
+    totalCost += shippingCost;
 
     // Créer la commande avec les données fournies
     const order = new Order({
@@ -44,7 +51,8 @@ exports.createOrder = async (req, res) => {
       totalCost,
       email,
       phone,
-      status: 'pending'
+      status: 'pending',
+      checkpayment
     });
 
     // Enregistrer la commande dans la base de données
@@ -76,16 +84,18 @@ exports.getOrders = async (req, res) => {
       return res.status(401).json({ message: 'Utilisateur non authentifié' });
     }
     const userID = req.user._id;
-    // // const  user = tlawij il user
-    // if(!user.role ==="admin"){
-    //   const orders = await Order.find({ user : userID }).populate('products');
-    // }else{
-    //   const orders = await Order.find({ }).populate('products');
-    // }
+    // const  user = userID.role
+    if(req.user.role ==="admin"){
+      const orders = await Order.find({  }).populate('products');
+      res.status(200).json({ message: 'Commandes récupérées avec succès', response: orders });
+    }else{
+      const orders = await Order.find({ user : userID}).populate('products');
+      res.status(200).json({ message: 'Commandes récupérées avec succès', response: orders });
+    }
     // Récupérer toutes les commandes de l'utilisateur
-    const orders = await Order.find({ user : userID }).populate('products');
+    // const orders = await Order.find({ user : userID }).populate('products');
 
-    res.status(200).json({ message: 'Commandes récupérées avec succès', response: orders });
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Erreur serveur' });

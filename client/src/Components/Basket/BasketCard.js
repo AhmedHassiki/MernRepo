@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 
 const BasketCard = ({cart}) => {
 
-  const quantityBasket = useSelector(state => state.cartReducer.count)
+  // const quantityBasket = useSelector(state => state.cartReducer.count)
   const dispatch = useDispatch()
   const [quantity, setQuantity] = useState(cart.count)
 
