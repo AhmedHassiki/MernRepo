@@ -1,7 +1,7 @@
-import { CREATE_ORDER, SET_SHIPPING_ADDRESS } from "../constant/orderConstant";
+import { CREATE_ORDER, SET_SHIPPING_ADDRESS, GET_ORDER } from "../constant/orderConstant";
 
 const initialState = {
-    order: {},
+    order: [],
     shippingAddress: {}
   };
   
@@ -11,6 +11,8 @@ const initialState = {
         return {...state, order: action.payload}
       case SET_SHIPPING_ADDRESS:
         return {...state, shippingAddress: action.payload}
+      case GET_ORDER:
+        return {...state, order : action.payload }
       default:
         return state;
     }

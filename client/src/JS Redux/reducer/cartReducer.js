@@ -11,7 +11,7 @@ export const cartReducer = (state = initialState, action) => {
     case LOAD_CART:
     return {...state , loading:true}
     case ADD_TO_CART:
-      return { ...state, basket : [...state.basket, action.payload]  }
+      return { ...state, basket : action.payload , loading:false }
     case FETCH_CART_SUCCESS:
         return {...state, basket : action.payload, loading: false, error: false};
     case FETCH_CART_FAILURE:

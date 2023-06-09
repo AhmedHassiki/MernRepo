@@ -5,7 +5,7 @@ export const getProducts = () => async(dispatch)=>{
     dispatch({type: GET_PRODUCTS_LOAD})
     try {
         let result = await axios.get('/api/product')
-        console.log(result.data.response)
+        // console.log(result.data.response)
         dispatch({
             type: GET_PRODUCTS_SUCCESS, 
             payload: result.data.response})
@@ -18,7 +18,7 @@ export const getProducts = () => async(dispatch)=>{
 
 export const deleteProduct = (id) => async(dispatch)=>{
     try {
-        console.log("id:" , id)
+        // console.log("id:" , id)
         await axios.delete(`/api/product/${id}`);
         dispatch(getProducts())
     } catch (error) {

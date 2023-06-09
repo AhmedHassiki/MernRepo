@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Card } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteCart, fetchCart, postCart } from '../../JS Redux/actions/CartAction'
 import {Link} from "react-router-dom"
 import {Table} from 'react-bootstrap'
@@ -8,31 +8,57 @@ import {Table} from 'react-bootstrap'
 
 const CheckoutOrder = ({cart}) => {
 
+  const basket = useSelector(state => state.cartReducer.basket)
     const handleTotal = () => {
         return cart.productId.price * cart.count}
+
+        // const sousTotal = () => {
+        //   return cart.reduce((total, product) => {
+        //     return total + (product.productId.price * product.count);
+        //   }, 0);
+        // };
+        const cartArr = Object.values(cart);
+// console.log("cartArr", cartArr);
+const sousTotal = () => {
+  return cart.reduce((total, product) => {
+    const price = typeof product.productId.price === 'number' ? product.productId.price : 0;
+    const count = typeof product.count === 'number' ? product.count : 0;
+    return total + (price * count);
+  }, 0);
+};
+// console.log("sousTotal", sousTotal)
+
     return (
 
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th colSpan={1}>Produits</th>
-          <th>Prix</th>
-          <th>Total</th>
-        </tr>
-      </thead>
+    
+      <Table>
       <tbody>
         <tr>
-          <td colSpan={2} style={{display:"flex" , flexWrap:'wrap'}}>
+          <td colSpan={1} style={{display:"flex" , flexWrap:'wrap'}}>
               <img style={{width:"70px"}} alt={cart.productId.title} src={cart.productId.selectedFile}/>
               <h6 style={{marginLeft : "50px"}} >{cart.productId.title}</h6>
           </td>
-          
+            
           {/* <td>{cart.productId.price} DT</td> */}
           <td>{handleTotal()} DT</td>
         </tr>
       </tbody>
-      <p>Sous-total</p>
+      {/* <td>{sousTotal()} DT</td> */}
+
     </Table>
+
+
+
+
+
+
+
+
+
+
+
+
+
 // <div  style={{display:"flex" , flexWrap:'wrap', justifyContent:'center'}}>
 //         <Card style={{ width: '18rem', margin:'10px', height:'38rem' }}>
 //       <Card.Img style={{ width: '17rem', height:'24rem', marginTop:'10px' }} variant="top" src={cart.productId.selectedFile}/>

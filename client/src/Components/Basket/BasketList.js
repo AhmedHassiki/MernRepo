@@ -1,44 +1,151 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import BasketCard from './BasketCard'
-import { Button, Spinner } from 'react-bootstrap'
-import { fetchCart } from '../../JS Redux/actions/CartAction'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import BasketCard from "./BasketCard";
+import { Button, Form, Spinner, Table } from "react-bootstrap";
+import { fetchCart } from "../../JS Redux/actions/CartAction";
+import { Link } from "react-router-dom";
+import { createOrder } from "../../JS Redux/actions/orderAction";
 
 const BasketList = () => {
+  const dispatch = useDispatch();
+  const basket = useSelector((state) => state.cartReducer.basket);
+  // console.log("lpanier :", basket)
+  const loading = useSelector((state) => state.cartReducer.loading);
 
   
+    const [newOrder, setNewOrder] = useState({
+      shippingAddress: "",
+      paymentMethod: "koko",
+      shippingCost: 7,
+      noShippingCost: 0,
+      email: "",
+      phone: "",
+    });
 
-    // const basket= useSelector(state=>state.cartReducer.basket)
-    // const loading = useSelector(state=>state.cartReducer.loading)
-    // const error= useSelector(state=>state.cartReducer.error)
-    // console.log("lpanier :", basket)
 
-    // if (error){
-    //   return <h1>An error has occured when getting carts from basket</h1>
-    // }
-    const dispatch = useDispatch()
-    const basket = useSelector((state)=>state.cartReducer.basket)
-    console.log("lpanier :", basket)
-    const loading = useSelector((state)=>state.cartReducer.loading)
-    
-    useEffect(()=>{
-        dispatch(fetchCart())
-    },[])
-  
+  const handleOrder = (e) => {
+    setNewOrder({ ...newOrder, [e.target.name]: e.target.value });
+      };
+      console.log("newOrder", newOrder)
+
+  const sendOrder = () => {
+    dispatch(createOrder(newOrder))
+  }
+  // const handleOrder = ()=>{
+  //   dispatch(createOrder({shippingAddress:"slh", paymentMethod:"test" , shippingCost:10}))
+  // }
+
+  const total = () => {
+    let t = 0;
+    let total = 0;
+    basket.map((el) => {
+      t = el.productId.price * el.count;
+      total = total + t;
+    });
+    return total;
+  };
+
+  console.log(total());
+
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, []);
 
   return (
     <div>
       <h2>Mon panier</h2>
-      {/* {basket.length === 0 ? (
-        <p>Votre panier est vide.</p>
-      ) : (   basket.map((el) => (<BasketCard key={el._id} cart={el}/>)))} */}
-      { loading ? (<Spinner animation="border" variant="danger" />) : basket.length === 0 ? (
-      <h2>There's no cart in the basket</h2> 
-      ) : ( basket.map((el)=> <BasketCard key={el._id} cart={el} /> ) ) }
-      <Link to='/order'><Button >Confirmer ma commande</Button></Link>
-    </div>
-  )
-}
 
-export default BasketList
+      <div style={{ display: "flex" }}>
+        <Table className="table" style={{ margin: "20px", padding: "20px" }}>
+          <thead>
+            <tr>
+              <th style={{ width: "80px" }}>Produits</th>
+              <th style={{ width: "30px" }}>Prix</th>
+              <th style={{ width: "30px" }}>Quantité</th>
+              <th style={{ width: "30px" }}>Total</th>
+            </tr>
+          </thead>
+
+          {/* {basket.length === 0 ? (
+            <p>Votre panier est vide.</p>
+          ) : (   basket.map((el) => (<BasketCard key={el._id} cart={el}/>)))} */}
+          {loading ? (
+            <Spinner animation="border" variant="danger" />
+          ) : basket.length === 0 ? (
+            <h2>There's no cart in the basket</h2>
+          ) : (
+            basket.map((el) => <BasketCard key={el._id} cart={el} />)
+          )}
+          <h5> {total()} </h5>
+        </Table>
+        <Form>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Shipping Address</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              style={{ width: "250px", height: "100px" }}
+              type=""
+              placeholder="Enter your shipping address"
+              onChange={handleOrder}
+              name = "shippingAddress"
+            />
+            <Form.Label>E-mail</Form.Label>
+            <Form.Control
+              style={{ width: "250px" }}
+              type="text"
+              placeholder="Enter your e-mail"
+              onChange={handleOrder}
+              name = "email"
+            />
+            <Form.Label>Phone number</Form.Label>
+            <Form.Control
+              style={{ width: "250px" }}
+              type="text"
+              placeholder="Enter your phone number"
+              onChange={handleOrder}
+              name = "phone"
+            />
+          </Form.Group>
+          {["checkbox"].map((type) => (
+            <div key={`reverse-${type}`} className="mb-3">
+              <Form.Check
+                label="Livraison par E-mail"
+                // name="group1"
+                type={type}
+                id={`reverse-${type}-1`}
+                name = "noShippingCost"
+              />
+              <Form.Check
+                //  onChange={()=>setIsShippingCost(true)}
+                label="Livraison à domicile"
+                // name="group1"
+                type={type}
+                id={`reverse-${type}-2`}
+                onChange={handleOrder}
+                name = "ShippingCost"
+              />
+            </div>
+          ))}
+
+          <Form.Check // prettier-ignore
+            type="switch"
+            id="custom-switch"
+            label=" Paiement en ligne (E-dinar - Sobflouss - D17)"
+          />
+          <Form.Check // prettier-ignore
+            disabled
+            type="switch"
+            label="Paiement à la livraison"
+            id="disabled-custom-switch"
+          />
+        </Form>
+      </div>
+      <Link to="/order">
+        <Button onClick={() =>sendOrder()}>Confirmer ma commande</Button>
+      </Link>
+    </div>
+  );
+};
+
+export default BasketList;

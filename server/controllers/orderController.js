@@ -5,13 +5,14 @@ const { getCartItems, deleteCart } = require('./CartController');
 // Créer une nouvelle commande
 exports.createOrder = async (req, res) => {
   try {
+    
     // Vérifier si l'utilisateur est connecté
     if (!req.user || !req.user._id) {
       return res.status(401).json({ message: 'Utilisateur non authentifié' });
     }
 
     // Récupérer les données de la commande à partir du corps de la requête
-    const { shippingAddress, paymentMethod } = req.body;
+    const { shippingAddress, paymentMethod, email, phone } = req.body;
 
 
     // Récupérer les produits dans le panier de l'utilisateur
@@ -25,13 +26,13 @@ exports.createOrder = async (req, res) => {
 
     // Calculer le coût total de la commande
     let totalCost = 0;
-    let shippingCost = 0;
+    let shippingCost = req.body.shippingCost;
 
     for (const item of cartItems) {
-        console.log(item.productId.price)
+        // console.log(item.productId.price)
       totalCost += item.count * parseInt(item.productId.price);
-      shippingCost += totalCost + 7;
     }
+    shippingCost += totalCost;
 
     // Créer la commande avec les données fournies
     const order = new Order({
@@ -41,6 +42,8 @@ exports.createOrder = async (req, res) => {
       paymentMethod,
       shippingCost,
       totalCost,
+      email,
+      phone,
       status: 'pending'
     });
 
@@ -65,23 +68,29 @@ exports.createOrder = async (req, res) => {
 };
 
 
-// // Récupérer toutes les commandes de l'utilisateur connecté
-// exports.getOrders = async (req, res) => {
-//   try {
-//     // Vérifier si l'utilisateur est connecté
-//     if (!req.user || !req.user._id) {
-//       return res.status(401).json({ message: 'Utilisateur non authentifié' });
-//     }
+// Récupérer toutes les commandes de l'utilisateur connecté
+exports.getOrders = async (req, res) => {
+  try {
+    // Vérifier si l'utilisateur est connecté
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: 'Utilisateur non authentifié' });
+    }
+    const userID = req.user._id;
+    // // const  user = tlawij il user
+    // if(!user.role ==="admin"){
+    //   const orders = await Order.find({ user : userID }).populate('products');
+    // }else{
+    //   const orders = await Order.find({ }).populate('products');
+    // }
+    // Récupérer toutes les commandes de l'utilisateur
+    const orders = await Order.find({ user : userID }).populate('products');
 
-//     // Récupérer toutes les commandes de l'utilisateur
-//     const orders = await Order.find({ user: req.user._id }).populate('products.product');
-
-//     res.status(200).json({ message: 'Commandes récupérées avec succès', orders });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Erreur serveur' });
-//   }
-// };
+    res.status(200).json({ message: 'Commandes récupérées avec succès', response: orders });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
 
 // // Mettre à jour l'état d'une commande
 // exports.updateOrderStatus = async (req, res) => {

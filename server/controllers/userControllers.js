@@ -36,7 +36,9 @@ exports.registerUser = async (req, res) => {
         const payload = {
             id : user._id
         };
-        const token = await jwt.sign(payload, process.env.SECRET_KEY, {expiresIn:"1h"});
+        const token = await jwt.sign(payload, process.env.SECRET_KEY);
+        // const token = await jwt.sign(payload, process.env.SECRET_KEY, {expiresIn:"1h"});
+
         return res.status(200).send({msg:'User registered successfully', user , token});
         
     } catch (error) {
@@ -75,7 +77,8 @@ exports.loginUser = async (req, res) => {
         const payload = {
             id : user._id
         };
-        const token = await jwt.sign(payload, process.env.SECRET_KEY, {expiresIn:"1h"});
+        const token = await jwt.sign(payload, process.env.SECRET_KEY);
+        // const token = await jwt.sign(payload, process.env.SECRET_KEY, {expiresIn:"1h"});
         return res.status(200).send({msg:'User login successfully', user, token});
         
     } catch (error) {

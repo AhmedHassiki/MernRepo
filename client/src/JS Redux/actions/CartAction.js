@@ -4,7 +4,7 @@ import axios from 'axios'
 
 
 export const postCart = (id, count) => async (dispatch) => {
-
+   dispatch(loading())
   try {
     const config = {
       headers:{
@@ -12,8 +12,8 @@ export const postCart = (id, count) => async (dispatch) => {
       }
     };
     const { data } = await axios.post('/api/cart', { productId: id, count }, config);
-    dispatch({ type: ADD_TO_CART, payload: data.response } );
-    dispatch(fetchCart())
+    dispatch({ type: ADD_TO_CART, payload: data.cart } );
+    // dispatch(fetchCart())
   } catch (error) {
     console.log(error);
   }
@@ -28,7 +28,7 @@ export const fetchCart = () => async(dispatch) => {
       }
     };
     let result = await axios.get('/api/cart', config);
-    console.log("result.data.response : ", result.data.response)
+    // console.log("result.data.response : ", result.data.response)
     dispatch({ 
       type: FETCH_CART_SUCCESS, 
       payload: result.data.response });
@@ -39,7 +39,7 @@ export const fetchCart = () => async(dispatch) => {
   }
 };
 
-export const loading = dispatch=>{
+export const loading = (dispatch) => {
   return{
     type:LOAD_CART
   }
@@ -47,7 +47,7 @@ export const loading = dispatch=>{
 
 export const deleteCart = (id) => async(dispatch)=>{
   try {
-      console.log("id:" , id)
+      // console.log("id:" , id)
       await axios.delete(`/api/cart/${id}`);
       dispatch(fetchCart())
   } catch (error) {

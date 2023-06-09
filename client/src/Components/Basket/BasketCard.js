@@ -1,58 +1,54 @@
-import React, { useState } from 'react'
-import { Button, Card } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { Button, ButtonToolbar, Card } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteCart, fetchCart, postCart } from '../../JS Redux/actions/CartAction'
-import {Link} from "react-router-dom"
 import {Table} from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+
 // import { useSelector } from 'react-redux';
 
 const BasketCard = ({cart}) => {
 
+  const quantityBasket = useSelector(state => state.cartReducer.count)
   const dispatch = useDispatch()
   const [quantity, setQuantity] = useState(cart.count)
 
-  const handleEdit = async(id, count) => {
-      dispatch(postCart(id, count));
-      dispatch(fetchCart())      
-    }
+  const handleEdit = (id, count) => {
+    dispatch(postCart(id, count));
+    // dispatch(fetchCart())      
+  }
   const handleDelete = (id) => {
     dispatch(deleteCart(id))
-    dispatch(fetchCart())
+    // dispatch(fetchCart())
   }
-  
-  
+  const handleTotal = () => {
+    return cart.productId.price * quantity}
 
-console.log(cart);
 
   return (
 <>
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th colSpan={2}>Produits</th>
-          <th>Prix</th>
-          <th>Quantité</th>
-          <th>Total</th>
-        </tr>
-      </thead>
+    <Table>
       <tbody>
         <tr>
-          <td colSpan={2} style={{display:"flex" , flexWrap:'wrap'}}>
+          <td style={{display:"flex" , flexWrap:'wrap', width : '80px'}}>
               <img style={{width:"70px"}} alt={cart.productId.title} src={cart.productId.selectedFile}/>
-              <h6 style={{marginLeft : "50px"}} >{cart.productId.title}</h6>
+              {/* <h6 style={{marginLeft : "50px"}} >{cart.productId.title}</h6> */}
+              {cart.productId.title}
           </td>
-          <td></td>
-          <td>{cart.productId.price} DT</td>
-          
-
-          <td style={{display:"flex" , flexWrap:'wrap'}}>
-            <Button onClick={() => setQuantity(quantity + 1)} style={{ marginRight: '10px' }}> + </Button>
-            <p className="product-description">{quantity}</p>
-            <Button onClick={() => setQuantity(quantity - 1)} style={{ marginLeft: '10px' }} disabled={quantity === 1}> - </Button></td>
-          <td></td>
+          <td style={{width : '30px'}}>{cart.productId.price} DT</td>
+          <td style={{width : '30px'}}>
+            <ButtonToolbar><Button bsSize="xsmall" onClick={() => setQuantity(quantity + 1)}> + </Button>
+            {quantity}
+            <Button bsSize="xsmall" onClick={() => setQuantity(quantity - 1)} disabled={quantity === 1}> - </Button>
+            </ButtonToolbar>
+          </td>
+          <td>{handleTotal()}</td>
         </tr>
       </tbody>
-    </Table>
+      </Table>
+      <Link to="/panier"><Button style={{ marginLeft: '10px' }} onClick={()=>handleEdit(cart.productId, quantity)}> Edit </Button></Link>
+      <Button onClick={()=>handleDelete(cart._id)} > Delete</Button>
+    
     
     </>
 // <div  style={{display:"flex" , flexWrap:'wrap', justifyContent:'center'}}>

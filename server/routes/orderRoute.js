@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 router.post('/', isAuth, controller.createOrder);
-// router.get('/', isAuth, controller.);
+router.get('/', isAuth, controller.getOrders);
 // router.delete('/:id', controller.)
 
 
