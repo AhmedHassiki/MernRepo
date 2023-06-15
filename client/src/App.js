@@ -40,6 +40,12 @@ useEffect(()=>{
   } 
 },[])
 
+useEffect(() => {
+  fetch("https://authentikey-mern-app.onrender.com/")
+    .then((res) => res.json())
+    .then((data) => setMessage(data.message));
+},[]);
+
 // ! this use effect i've used it to refresh and get basket.length in front of Panier in the navbar
 useEffect(()=>{
   dispatch(fetchCart())
