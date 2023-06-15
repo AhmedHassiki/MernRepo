@@ -44,7 +44,7 @@ exports.createOrder = async (req, res) => {
     // Créer la commande avec les données fournies
     const order = new Order({
       user: req.user._id,
-      products: cartItems.map(item => ({ product: item.productId._id, count: item.count })),
+      products: cartItems.map(item => ({ product: item.productId._id, count: item.count,  })),
       shippingAddress,
       paymentMethod,
       shippingCost,
@@ -86,7 +86,13 @@ exports.getOrders = async (req, res) => {
     const userID = req.user._id;
     // const  user = userID.role
     if(req.user.role ==="admin"){
-      const orders = await Order.find({  }).populate('products');
+      
+      // *!    **** Zedna .populate('user') bech fel order yzidna 3al les produits les données mta3 lutilisateur 
+      // *!     (esmou w la9ab) eli chra, blech biha yjibelna ken el userID mte3ou. el 'user' jebha m schema mta3 order, 
+      // *!     eli reférence mte7a Users, eli howa esm el collecction mte3na User fel model
+      // ? .populate({path: 'products', populate: {path: 'product'}}); =>>> it permit two acces all the product instead of products 
+      // ? array with objects and inside them count and product id
+      const orders = await Order.find({}).populate('user').populate({path: 'products', populate: {path: 'product'}});
       res.status(200).json({ message: 'Commandes récupérées avec succès', response: orders });
     }else{
       const orders = await Order.find({ user : userID}).populate('products');
@@ -94,8 +100,11 @@ exports.getOrders = async (req, res) => {
     }
     // Récupérer toutes les commandes de l'utilisateur
     // const orders = await Order.find({ user : userID }).populate('products');
+  
+    // const userDetails = Order.find({user: user._id}).populate('products');
+    // // res.status(200).json({ message: 'Utilisateur récupéré', response: userDetails });
+    // console.log("userDetails", userDetails)
 
-    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Erreur serveur' });

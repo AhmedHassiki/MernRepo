@@ -3,24 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import BasketCard from "./BasketCard";
 import { Button, Form, Spinner, Table } from "react-bootstrap";
 import { fetchCart } from "../../JS Redux/actions/CartAction";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createOrder } from "../../JS Redux/actions/orderAction";
 
 const BasketList = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const basket = useSelector((state) => state.cartReducer.basket);
-  // console.log("lpanier :", basket)
+
   const loading = useSelector((state) => state.cartReducer.loading);
   //*********** state for the checkbox payment and shipping */
-  // const [checkpayment, setCheckpayment] = useState(false)
-  // const handleChange = (e) => {
-  //   setCheckpayment(e.target.checked)
-  // }
-  const [checkpayment, setCheckpayment] = useState(false);
-  console.log("checkpayment : ",checkpayment)
-  // const handleChange = (e) => {
-  //   setCheckpayment(e.target.name : e.target.checked);
-  // };
+
+  // const [checkpayment, setCheckpayment] = useState(false);
+
 
   //*********** state for data that'll be sent to database */
   const [newOrder, setNewOrder] = useState({
@@ -30,15 +25,15 @@ const BasketList = () => {
     phone: "",
     checkpayment:false
   });
-  console.log("order : " , newOrder)
+  console.log("basket", basket)
 
   const handleOrder = (e) => {
     setNewOrder({ ...newOrder, [e.target.name]: e.target.value });
   };
-  // console.log("newOrder", newOrder);
 
   const sendOrder = () => {
     dispatch(createOrder(newOrder));
+    navigate('/order')
   };
 
   const total = () => {
@@ -54,40 +49,59 @@ const BasketList = () => {
     return total;
   };
 
-  // console.log(total());
+
+  const isFormValid = () => {
+    return (
+      newOrder.shippingAddress.trim() !== "" &&
+      newOrder.email.trim() !== "" &&
+      newOrder.phone.trim() !== "" &&
+      (newOrder.checkpayment === "true" || newOrder.checkpayment === "false")
+      
+    );
+  };
+
+  const [isFormValidated, setIsFormValidated] = useState(false);  
+
+  useEffect(() => {
+    setIsFormValidated(isFormValid());
+  }, [newOrder]);
 
   useEffect(() => {
     dispatch(fetchCart());
-  }, []);
+  },[]);
+
 
   return (
     <div>
       <h2>Mon panier</h2>
 
       <div style={{ display: "flex" }}>
+        
         <Table className="table" style={{ margin: "20px", padding: "20px" }}>
           <thead>
             <tr>
-              <th style={{ width: "80px" }}>Produits</th>
-              <th style={{ width: "30px" }}>Prix</th>
-              <th style={{ width: "30px" }}>Quantité</th>
-              <th style={{ width: "30px" }}>Total</th>
+              <th >Produits</th>
+              <th >Prix</th>
+              <th >Quantité</th>
+              <th >Total</th>
+              <th >Update</th>
+              <th >Delete</th>
             </tr>
           </thead>
 
-          {/* {basket.length === 0 ? (
-            <p>Votre panier est vide.</p>
-          ) : (   basket.map((el) => (<BasketCard key={el._id} cart={el}/>)))} */}
           {loading ? (
             <Spinner animation="border" variant="danger" />
           ) : basket.length === 0 ? (
             <h2>There's no cart in the basket</h2>
+            
           ) : (
             basket.map((el) => <BasketCard key={el._id} cart={el} />)
           )}
-          <h5> {total()} </h5>
+
         </Table>
+
         <Form>
+        <h5> Montant total : {total()}DT </h5>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Shipping Address</Form.Label>
             <Form.Control
@@ -98,6 +112,7 @@ const BasketList = () => {
               placeholder="Enter your shipping address"
               onChange={handleOrder}
               name="shippingAddress"
+              required
             />
             <Form.Label>E-mail</Form.Label>
             <Form.Control
@@ -106,37 +121,18 @@ const BasketList = () => {
               placeholder="Enter your e-mail"
               onChange={handleOrder}
               name="email"
+              required
             />
             <Form.Label>Phone number</Form.Label>
             <Form.Control
               style={{ width: "250px" }}
-              type="text"
+              type="number"
               placeholder="Enter your phone number"
               onChange={handleOrder}
               name="phone"
+              required
             />
           </Form.Group>
-          {/* {["checkbox"].map((type) => (
-            <div key={`reverse-${type}`} className="mb-3">
-              <Form.Check
-                label="Livraison par E-mail"
-                // name="group1"
-                type={type}
-                id={`reverse-${type}-1`}
-                // name = "noShippingCost"
-                // onChange={setCheckpayment(checkpayment===true))}
-              />
-              <Form.Check
-                //  onChange={()=>setIsShippingCost(true)}
-                label="Livraison à domicile"
-                // name="group1"
-                type={type}
-                id={`reverse-${type}-2`}
-                onChange={handleOrder}
-                name = "ShippingCost"
-              />
-            </div>
-          ))} */}
           <label>
             <input
               type="checkbox"
@@ -145,7 +141,7 @@ const BasketList = () => {
               name="checkpayment"
               value={false}
             />
-            email
+            &nbsp;Livraison par Email
           </label>
           <label>
             <input
@@ -155,7 +151,7 @@ const BasketList = () => {
               onChange={handleOrder}
               value={true}
             />
-            Livraison à domicile + 7DT
+            &nbsp;Livraison à domicile + 7DT
           </label>
 
           {/* <Form.Check // prettier-ignore
@@ -171,9 +167,7 @@ const BasketList = () => {
           /> */}
         </Form>
       </div>
-      <Link to="/order">
-        <Button onClick={() => sendOrder()}>Confirmer ma commande</Button>
-      </Link>
+        <Button onClick={() => sendOrder()} disabled={!isFormValid()}>Confirmer ma commande</Button>
     </div>
   );
 };

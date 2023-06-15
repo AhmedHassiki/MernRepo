@@ -1,8 +1,9 @@
-import React,{ useState }  from 'react';
+import React,{ useEffect, useState }  from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Button, Modal , Form} from 'react-bootstrap';
 import { userLogin } from '../JS Redux/actions/authActions';
+import { fetchCart } from '../JS Redux/actions/CartAction';
 
 const FormLogin = () => {
     const navigate = useNavigate();
@@ -11,14 +12,29 @@ const FormLogin = () => {
     const [email , setEmail] = useState("");
     const [password , setPassword] = useState("");
 
+
+  //   const refreshPage = ()=>{
+  //     window.location.reload();
+  //  }
     const handleClose = () => setShow(false);
     const handleShow  = () => setShow(true);
     const handleLogin = () => {
       dispatch(userLogin({email, password})); // userLogin from actions
+      dispatch(fetchCart())
       navigate('/');
+      // ! when i login it cannot render rapidly the item in the cart, so i made 1 second latency, to refresh the page automatically 
+      // setTimeout( function() { refreshPage() }, 1000);
     }
 
+  //   const refreshPage = ()=>{
+  //     window.location.reload();
+  //  }
 
+    useEffect(()=>{      
+        dispatch(fetchCart())
+    },[])
+
+    
     
 
   return (
@@ -51,7 +67,7 @@ const FormLogin = () => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={()=>{handleLogin(); handleClose()}}>
+          <Button variant="primary" onClick={()=>{handleLogin() ;handleClose()}}>
             Save Changes
           </Button>
         </Modal.Footer>

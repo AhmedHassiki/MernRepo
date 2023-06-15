@@ -26,8 +26,8 @@ const TheProductList = () => {
     
     return (
       <>
-  <h1 style={{ marginTop: '55px', marginBottom: '10px' }}>Nos Produits</h1>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <h1 style={{ textAlign : "center"}}>Nos Produits</h1>
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin : '0 15px'   }}>
     {loadProducts ? (
       <Spinner animation="border" variant="danger" />
     ) : products.length === 0 ? (

@@ -37,8 +37,9 @@ exports.addToCart = async (req, res) => {
         return res.status(401).json({ message: 'Utilisateur non authentifié' });
       }  
       const userId = req.user._id;  
-      const result = await Cart.find({ userId }).populate('productId');  
+      const result = await Cart.find({ userId }).populate('productId')
       res.status(200).json({msg: "user ID and product found", response:result});
+
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Erreur serveur' });

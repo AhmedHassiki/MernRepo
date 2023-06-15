@@ -1,6 +1,8 @@
 import React from 'react'
 // import  windowsminipng from './windowsminipng.png'
-import { Card, Button, Container, Row, Col, Image } from 'react-bootstrap'
+import { Card, Button} from 'react-bootstrap';
+// import { Container, Row, Col, Image } from 'react-bootstrap';
+
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteProduct, getOneProduct } from '../JS Redux/actions/productAction'
 import { Link } from 'react-router-dom'

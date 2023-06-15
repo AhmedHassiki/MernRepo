@@ -24,6 +24,8 @@ const editFalse = () => dispatch(toggleFalse())
 const userAuth = useSelector((state)=>state.authReducer.user)
 const auth = useSelector((state)=>state.authReducer.isAuth)
 
+const basket = useSelector(state=>state.cartReducer.basket)
+
 const logOut = () => {
   dispatch(logout());
   navigate('/')
@@ -33,11 +35,15 @@ const getUser = async() =>{
   await dispatch(getAuthUser());
 }
 useEffect(()=>{
-  if(localStorage.getItem("token")){
-    getUser()
-    fetchCart()
+    if(localStorage.getItem("token")){
+    getUser()    
   } 
 },[])
+
+// ! this use effect i've used it to refresh and get basket.length in front of Panier in the navbar
+useEffect(()=>{
+  dispatch(fetchCart())
+},[auth,userAuth])
 
   return (
     <div>
@@ -51,17 +57,20 @@ useEffect(()=>{
               {userAuth.role === "admin" ? (<Link to="/add"><Button onClick={editFalse} className="border-0 bg-transparent" variant="none" style={{color: "white"}}>Add</Button></Link>) :(<></>) }
           </Nav>
           <Nav>
-          { auth ? <Button variant="dark" style={{marginRight:"3rem"}} onClick={logOut}>
-        Logout
-      </Button> : (
-      <>
-        <FormLogin /> 
-        <FormRegister />
-        
-      </>
-        )
-      }
-      <Link to="/panier"><Button className="border-0 bg-transparent" variant="none" style={{color: "white"}}>Panier</Button></Link>
+          { auth ? 
+          <>
+            <Button variant="dark" style={{marginRight:"3rem"}} onClick={logOut}>Logout</Button>
+            <Link to="/order"><Button className="border-0 bg-transparent" variant="none" style={{color: "white"}}>Vos Achats</Button></Link>
+          </>
+          : (
+          <>
+            <FormLogin /> 
+            <FormRegister />
+          </>
+          )
+        }
+      {/* {basket.map(el=><Link to="/panier"><Button className="border-0 bg-transparent" variant="none" style={{color: "white"}}>Panier {el.count}  </Button></Link>)} */}
+      <Link to="/panier"><Button className="border-0 bg-transparent" variant="none" style={{color: "white"}}>Panier {basket.length === 0  ? <></> : basket.length}</Button></Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
