@@ -26,6 +26,9 @@ const auth = useSelector((state)=>state.authReducer.isAuth)
 
 const basket = useSelector(state=>state.cartReducer.basket)
 
+const [message, setMessage] = useState("");
+
+
 const logOut = () => {
   dispatch(logout());
   navigate('/')
@@ -53,6 +56,8 @@ useEffect(()=>{
 
   return (
     <div>
+
+      {message}
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
       <Container>
         <Navbar.Brand href="/">AuthentiKey</Navbar.Brand>
